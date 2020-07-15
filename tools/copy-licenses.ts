@@ -21,36 +21,40 @@ function ensure(data: any) {
 function extractMetadata(this: Buffer): [Record<string, any>, string]{
 	let content = this::Buffer.prototype.toString() as string
 
-	const l = do { "---" }, $ = 4
 	content = content.replace(/\n/gu, "###")
 
-	let y = /---(?<yaml>.*?)---(?<text>.*)/gmu.exec(content)
-	return do {
-		const yy = y?.groups?.yaml
-		const text = y?.groups?.text
+	let matches = /---(?<yaml>.*?)---(?<text>.*)/gmu.exec(content)
 
-		yy || throw new Error("No yaml matched")
-		text || throw new Error("No text matched")
+	const yamlText = matches?.groups?.yaml
+	const licenseText = matches?.groups?.text
 
-		let r = function() {
-			return String.prototype.replace.call(this, /###/gu, '\n')
-		}
+	yamlText || throw new Error("No yaml matched")
+	licenseText || throw new Error("No text matched")
 
-		return [ yaml.safeLoad(yy::r()), text::r() ]
+	let r = function() {
+		return String.prototype.replace.call(this, /###/gu, '\n')
 	}
+
+	return [ yaml.safeLoad(yamlText::r()), licenseText::r().trim() ]
 }
 
-async function copyLicense(this: string, inDir: string, outDir: string) {
-	this || throw new Error("must pass in 'file' as function's 'this' context")
-	let file
-	file ||= this
+interface LicenseEntry {
+	title: string
+	'spdx-id': string
+	nickname?: string
+	redirect_from?: string
+	hidden?: boolean
+	description: string
+	how: string
+	using: Record<string, string>[]
+	permissions: string[]
+	conditions: string[]
+	limitations: string[]
+	file: string
+}
 
-	const inn = path.resolve(?, file)
-
-	const content = await fs.promises.readFile(inn(inDir))
-	let [ licenseData, licenseText] = content::extractMetadata()
-	licenseText = String.prototype.trim.call(licenseText)
-	// await fs.promises.writeFile(inn(outDir), content)
+interface Metadata {
+	licenses: LicenseEntry
 }
 
 async function copyLicenses() {
@@ -60,10 +64,24 @@ async function copyLicenses() {
 	ensure(outDir).exists();
 
 
+	const metadata: Metadata = {
+		licenses: []
+	}
+
 	const files = await fs.promises.readdir(inDir)
 	for(const file of files) {
-		await file::copyLicense(inDir, outDir);
+		const inn = path.resolve(?, file)
+
+		const content = await fs.promises.readFile(inn(inDir))
+		let [ licenseData, licenseText]: [LicenseEntry, string] = content::extractMetadata()
+
+		licenseData.file = licenseData["spdx-id"]?.toLowerCase() + ".txt"
+		metadata.licenses.push(licenseData)
+
+		await fs.promises.writeFile(inn(outDir), licenseText)
 	}
+	const metadataFile = path.join(__dirname, '../build/metadata.json')
+	await fs.promises.writeFile(metadataFile, JSON.stringify(metadata, null, 2))
 }
 
 copyLicenses().catch((err) => {
