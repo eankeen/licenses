@@ -4,9 +4,11 @@
 	"description": "",
 	"main": "index.js",
 	"scripts": {
-		"build": "babel -d build --source-maps=inline src",
+		"copy": "cross-env BABEL_ENV=gulp gulp ",
+		"build": "babel -d build -x .ts --source-maps=inline src",
 		"build:tool": "babel -d tools -x .ts --source-maps=inline tools",
-		"start": "node build"
+		"start": "node build",
+		"test": "jest"
 	},
 	"keywords": [],
 	"author": "",
@@ -16,10 +18,19 @@
 		"@babel/core": "^7.10.5",
 		"@babel/preset-env": "^7.10.4",
 		"@babel/preset-typescript": "^7.10.4",
+		"@babel/register": "^7.10.5",
 		"@fox-land/babel-preset": "^0.6.0",
-		"@types/node": "^14.0.23"
-	},
-	"dependencies": {
-		"js-yaml": "^3.14.0"
+		"@types/node": "^14.0.23",
+		"babel-plugin-improved-piped-pipelines": "^1.2.0",
+		"cross-env": "^7.0.2",
+		"gulp": "^4.0.2",
+		"gulp-plumber": "^1.2.1",
+		"gulp-print": "^5.0.2",
+		"gulp-rename": "^2.0.0",
+		"gulp-replace": "^1.0.0",
+		"jest": "^26.1.0",
+		"js-yaml": "^3.14.0",
+		"through2": "^4.0.2",
+		"vinyl": "^2.2.0"
 	}
 }

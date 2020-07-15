@@ -1,3 +1,5 @@
 tools/*.js
 node_modules/
 build/
+src/licenses/*/*.txt
+src/licenses/*/*.json

@@ -1,0 +1,19 @@
+{
+	"presets": ["@babel/preset-typescript"],
+	"env": {
+		"development": {
+			"presets": ["@fox-land"]
+		},
+		"production": {
+			"presets": ["@fox-land"]
+		},
+		"test": {
+			"presets": ["@fox-land"]
+		},
+		"gulp": {
+			"plugins": [
+				["babel-plugin-improved-piped-pipelines", { "operator": "|>" }]
+			]
+		}
+	}
+}
