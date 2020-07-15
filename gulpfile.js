@@ -37,8 +37,8 @@ exports.default = async function () {
 			})
 		)
 		.pipe(print())
-		.pipe(replace(/\[year\]/giu, year))
-		.pipe(replace(/\[fullname\]/giu, fullname))
+		// .pipe(replace(/\[year\]/giu, year))
+		// .pipe(replace(/\[fullname\]/giu, fullname))
 		.pipe(
 			createData({
 				year,

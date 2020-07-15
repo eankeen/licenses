@@ -4,7 +4,7 @@
 	"description": "",
 	"main": "index.js",
 	"scripts": {
-		"copy": "cross-env BABEL_ENV=gulp gulp ",
+		"copy": "cross-env BABEL_ENV=gulp gulp --require=@babel/register",
 		"build": "babel -d build -x .ts --source-maps=inline src",
 		"build:tool": "babel -d tools -x .ts --source-maps=inline tools",
 		"start": "node build",
