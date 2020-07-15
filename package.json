@@ -1,0 +1,25 @@
+{
+	"name": "licenses",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"build": "babel -d build --source-maps=inline src",
+		"build:tool": "babel -d tools -x .ts --source-maps=inline tools",
+		"start": "node build"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "Apache-2.0",
+	"devDependencies": {
+		"@babel/cli": "^7.10.5",
+		"@babel/core": "^7.10.5",
+		"@babel/preset-env": "^7.10.4",
+		"@babel/preset-typescript": "^7.10.4",
+		"@fox-land/babel-preset": "^0.6.0",
+		"@types/node": "^14.0.23"
+	},
+	"dependencies": {
+		"js-yaml": "^3.14.0"
+	}
+}
