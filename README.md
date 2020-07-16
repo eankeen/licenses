@@ -7,7 +7,7 @@ List of all licenses shown on choosealicense.com. A complete list from SPDX is a
 Soon to be 100% up to date
 
 ```js
-const licenses = new Licenses();
-const license = licenses.get("MIT");
-const licenseText = await license.textRaw();
+const licenses = new Licenses()
+const license = licenses.get('MIT')
+const licenseText = await license.textRaw()
 ```
