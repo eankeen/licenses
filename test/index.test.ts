@@ -1,6 +1,6 @@
-import { Licenses } from "../src";
+import { Licenses } from '../src'
 
-describe("filling in values to license", () => {
+describe('filling in values to license', () => {
 	const actualLicenseText = `MIT License
 
 Copyright (c) 2020 Edwin Kofler
@@ -21,33 +21,33 @@ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.`;
+SOFTWARE.`
 
-	test("basics textSync works", () => {
-		const licenses = new Licenses();
+	test('basics textSync works', () => {
+		const licenses = new Licenses()
 
-		const license = licenses.get("MIT");
+		const license = licenses.get('MIT')
 		const licenseText = license.textSync({
 			year: 2020,
-			fullname: "Edwin Kofler",
-		});
+			fullname: 'Edwin Kofler',
+		})
 
-		expect(licenseText).toBe(actualLicenseText);
-	});
+		expect(licenseText).toBe(actualLicenseText)
+	})
 
-	test("basic text works", async () => {
-		const licenses = new Licenses();
-		const license = licenses.get("MIT");
+	test('basic text works', async () => {
+		const licenses = new Licenses()
+		const license = licenses.get('MIT')
 		const licenseText = await license.text({
 			year: 2020,
-			fullname: "Edwin Kofler",
-		});
+			fullname: 'Edwin Kofler',
+		})
 
-		expect(licenseText).toBe(actualLicenseText);
-	});
-});
+		expect(licenseText).toBe(actualLicenseText)
+	})
+})
 
-describe("using raw licenses", () => {
+describe('using raw licenses', () => {
 	const actualLicenseRaw = `MIT License
 
 Copyright (c) [year] [fullname]
@@ -68,22 +68,22 @@ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.`;
+SOFTWARE.`
 
-	test("basics textRaw works", () => {
-		const licenses = new Licenses();
+	test('basics textRaw works', () => {
+		const licenses = new Licenses()
 
-		const license = licenses.get("MIT");
-		const licenseText = license.textRawSync();
+		const license = licenses.get('MIT')
+		const licenseText = license.textRawSync()
 
-		expect(licenseText).toBe(actualLicenseRaw);
-	});
+		expect(licenseText).toBe(actualLicenseRaw)
+	})
 
-	test("basic raw works async", async () => {
-		const licenses = new Licenses();
-		const license = licenses.get("MIT");
-		const licenseText = await license.textRaw();
+	test('basic raw works async', async () => {
+		const licenses = new Licenses()
+		const license = licenses.get('MIT')
+		const licenseText = await license.textRaw()
 
-		expect(licenseText).toBe(actualLicenseRaw);
-	});
-});
+		expect(licenseText).toBe(actualLicenseRaw)
+	})
+})

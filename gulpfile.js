@@ -1,13 +1,13 @@
-const fs = require("fs");
-const path = require("path");
-const { dest, parallel, src } = require("gulp");
-const plumber = require("gulp-plumber");
-const replace = require("gulp-replace");
-const { default: print } = require("gulp-print");
-const rename = require("gulp-rename");
-const File = require("vinyl");
-const through2 = require("through2");
-const yaml = require("js-yaml");
+const fs = require('fs')
+const path = require('path')
+const { dest, parallel, src } = require('gulp')
+const plumber = require('gulp-plumber')
+const replace = require('gulp-replace')
+const { default: print } = require('gulp-print')
+const rename = require('gulp-rename')
+const File = require('vinyl')
+const through2 = require('through2')
+const yaml = require('js-yaml')
 
 /**
  * @typedef {object} CustomLicense
@@ -23,17 +23,17 @@ const yaml = require("js-yaml");
  */
 
 /** @type {string[]} */
-globalThis.licenseList = [];
+globalThis.licenseList = []
 
-const year = 2020;
-const fullname = "Edwin Kofler";
+const year = 2020
+const fullname = 'Edwin Kofler'
 
 exports.default = async function () {
-	await src("./choosealicense.com/_licenses/*.txt")
+	await src('./choosealicense.com/_licenses/*.txt')
 		.pipe(plumber())
 		.pipe(
 			rename((/** @type {IRename} */ name) => {
-				return name.basename + ".old.txt";
+				return name.basename + '.old.txt'
 			})
 		)
 		.pipe(print())
@@ -45,16 +45,16 @@ exports.default = async function () {
 				fullname,
 			})
 		)
-		.pipe(dest("build/licenses/choose-a-license"))
-		.pipe(dest("src/licenses/choose-a-license"))
-		.on("end", async () => {
+		.pipe(dest('build/licenses/choose-a-license'))
+		.pipe(dest('src/licenses/choose-a-license'))
+		.on('end', async () => {
 			try {
-				await final();
+				await final()
 			} catch (err) {
-				console.error(err);
+				console.error(err)
 			}
-		});
-};
+		})
+}
 
 function createData(/** @type CustomLicense */ customLicense) {
 	return through2.obj(
@@ -65,18 +65,18 @@ function createData(/** @type CustomLicense */ customLicense) {
 		 * @param {any} next
 		 */
 		function (file, enc, next) {
-			const base = path.join(file.path, "..");
+			const base = path.join(file.path, '..')
 
-			const licenseFile = path.basename(file.path);
+			const licenseFile = path.basename(file.path)
 			const licenseFileShort = licenseFile.slice(
 				0,
 				licenseFile.length - path.extname(licenseFile).length
-			);
+			)
 
-			const licenseContent = file.contents.toString();
-			const [licenseYaml, licenseText] = extractData(licenseContent);
+			const licenseContent = file.contents.toString()
+			const [licenseYaml, licenseText] = extractData(licenseContent)
 
-			globalThis.licenseList.push(licenseYaml["spdx-id"]);
+			globalThis.licenseList.push(licenseYaml['spdx-id'])
 
 			this.push(
 				new File({
@@ -86,17 +86,17 @@ function createData(/** @type CustomLicense */ customLicense) {
 						new TextEncoder().encode(JSON.stringify(licenseYaml, null, 2))
 					),
 				})
-			);
+			)
 			this.push(
 				new File({
 					base,
 					path: path.join(base, `${licenseFileShort}.txt`),
 					contents: Buffer.from(new TextEncoder().encode(licenseText)),
 				})
-			);
-			next();
+			)
+			next()
 		}
-	);
+	)
 }
 
 /**
@@ -104,27 +104,27 @@ function createData(/** @type CustomLicense */ customLicense) {
  * @return {[Record<string, any>, string]}
  */
 function extractData(licenseContent) {
-	licenseContent = licenseContent.replace(/\n/gu, "###");
-	let matches = /---(?<yaml>.*?)---(?<text>.*)/gmu.exec(licenseContent);
+	licenseContent = licenseContent.replace(/\n/gu, '###')
+	let matches = /---(?<yaml>.*?)---(?<text>.*)/gmu.exec(licenseContent)
 
-	let yamlTextPre = matches?.groups?.yaml;
-	let licenseTextPre = matches?.groups?.text;
+	let yamlTextPre = matches?.groups?.yaml
+	let licenseTextPre = matches?.groups?.text
 
-	yamlTextPre || throw new Error("No yaml matched");
-	licenseTextPre || throw new Error("No text matched");
+	yamlTextPre || throw new Error('No yaml matched')
+	licenseTextPre || throw new Error('No text matched')
 
-	let yamlText = /** @type {string} */ (yamlTextPre);
-	let licenseText = /** @type {string} */ (licenseTextPre);
+	let yamlText = /** @type {string} */ (yamlTextPre)
+	let licenseText = /** @type {string} */ (licenseTextPre)
 
 	const replace = (/** @type string */ text) => {
-		return String.prototype.replace.call(text, /###/gu, "\n");
-	};
+		return String.prototype.replace.call(text, /###/gu, '\n')
+	}
 
-	return [yaml.safeLoad(replace(yamlText)), replace(licenseText).trim()];
+	return [yaml.safeLoad(replace(yamlText)), replace(licenseText).trim()]
 }
 
 async function final() {
-	await fs.promises.writeFile("src/licenses/choose-a-license/.gitkeep", "");
+	await fs.promises.writeFile('src/licenses/choose-a-license/.gitkeep', '')
 
 	const licenseListString = JSON.stringify(
 		{
@@ -132,14 +132,14 @@ async function final() {
 		},
 		null,
 		2
-	);
+	)
 	await fs.promises.writeFile(
-		"src/licenses/choose-a-license-licenses.json",
+		'src/licenses/choose-a-license-licenses.json',
 		licenseListString
-	);
+	)
 	await fs.promises.writeFile(
-		"build/licenses/choose-a-license-licenses.json",
+		'build/licenses/choose-a-license-licenses.json',
 		licenseListString
-	);
-	console.log(globalThis.licenseList);
+	)
+	console.log(globalThis.licenseList)
 }
