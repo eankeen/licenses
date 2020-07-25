@@ -11,3 +11,7 @@ const licenses = new Licenses()
 const license = licenses.get('MIT')
 const licenseText = await license.textRaw()
 ```
+
+## License
+
+Licensed under Apache-2.0
